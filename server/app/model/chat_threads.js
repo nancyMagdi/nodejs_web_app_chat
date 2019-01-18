@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, Sequelize) {
+module.exports = function (sequelize, Sequelize) {
   return sequelize.define('chat_threads', {
     Id: {
       type: Sequelize.BIGINT,
@@ -8,6 +8,7 @@ module.exports = function(sequelize, Sequelize) {
       primaryKey: true,
       autoIncrement: true
     },
+
     FirstUserId: {
       type: Sequelize.BIGINT,
       allowNull: false
@@ -17,6 +18,6 @@ module.exports = function(sequelize, Sequelize) {
       allowNull: false
     }
   }, {
-    tableName: 'chat_threads'
-  });
+      tableName: 'chat_threads'
+    });
 };

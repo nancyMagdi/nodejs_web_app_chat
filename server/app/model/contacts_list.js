@@ -7,7 +7,7 @@ module.exports = function(sequelize, Sequelize) {
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
-    },
+    },   
     FirstUserId: {
       type: Sequelize.BIGINT,
       allowNull: false
@@ -15,7 +15,7 @@ module.exports = function(sequelize, Sequelize) {
     SecondUserId: {
       type: Sequelize.BIGINT,
       allowNull: false
-    },
+    }, 
     isConnected: {
       type: Sequelize.INTEGER(2),
       allowNull: false

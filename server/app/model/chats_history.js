@@ -8,14 +8,15 @@ module.exports = function(sequelize, Sequelize) {
       primaryKey: true,
       autoIncrement: true
     },
-    ChatThreadId: {
-      type: Sequelize.BIGINT,
-      allowNull: false
-    },
     messageText: {
       type: Sequelize.TEXT,
       allowNull: false
     },
+   
+    ChatThreadId: {
+      type: Sequelize.BIGINT,
+      allowNull: false
+    },    
     FromUserId: {
       type: Sequelize.BIGINT,
       allowNull: false

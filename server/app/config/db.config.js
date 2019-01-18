@@ -22,10 +22,19 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.user = require('../model/users.js')(sequelize, Sequelize);
-/*
-//db.role = require('../model/role.model.js')(sequelize, Sequelize);
- 
-db.role.belongsToMany(db.user, { through: 'user_roles', foreignKey: 'roleId', otherKey: 'userId'});
-db.user.belongsToMany(db.role, { through: 'user_roles', foreignKey: 'userId', otherKey: 'roleId'});
-*/
+db.contactList = require('../model/contacts_list.js')(sequelize, Sequelize);
+db.chatHistory = require('../model/chats_history.js')(sequelize, Sequelize);
+db.chatThread = require('../model/chat_threads.js')(sequelize, Sequelize);
+
+// adding relations 
+db.chatHistory.belongsTo(db.chatThread, {foreignKey: 'ChatThreadId'});
+db.contactList.belongsTo(db.user, {foreignKey: 'FirstUserId'});
+db.contactList.belongsTo(db.user, {foreignKey: 'SecondUserId'});
+
+db.chatThread.belongsTo(db.user, {foreignKey: 'FirstUserId'});
+db.chatThread.belongsTo(db.user, {foreignKey: 'SecondUserId'});
+
+db.chatHistory.belongsTo(db.user, {foreignKey: 'SenderUserId'});
+db.chatHistory.belongsTo(db.user, {foreignKey: 'ReciverUserId'});
+
 module.exports = db;

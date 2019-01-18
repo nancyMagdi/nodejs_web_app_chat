@@ -1,7 +1,7 @@
 const db = require('../config/db.config.js');
 const config = require('../config/config.js');
-const User = db.user;
 
+const User = db.user;
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 
@@ -12,7 +12,7 @@ exports.signup = (req, res) => {
         FullName: req.body.name,
         Username: req.body.username,
         Password: bcrypt.hashSync(req.body.password, 8),
-        Status : 1,
+        Status: 1,
         LastLoginTime: new Date()
     }).then(user => {
         res.send("User registered successfully!");
@@ -43,7 +43,7 @@ exports.signin = (req, res) => {
         }).then(() => {
             res.status(200).send({ auth: true, accessToken: token });
         });
-        
+
     }).catch(err => {
         res.status(500).send('Error -> ' + err);
     });
@@ -51,7 +51,7 @@ exports.signin = (req, res) => {
 
 exports.userContent = (req, res) => {
     User.findOne({
-        where: { id: req.userId },
+        where: { id: req.params.userId },
         attributes: ['FullName', 'Username', 'Status', 'Image'],
     }).then(user => {
         res.status(200).json({
