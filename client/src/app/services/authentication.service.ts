@@ -29,8 +29,8 @@ export class AuthenticationService {
   //Login 
   public login(userInput: any) {
     this.http.post('/auth/signin', userInput).subscribe((response: any) => {
-      if (response.status === 1) {
-        this.userToken.next(response.data);
+      if (response.auth) {
+        this.userToken.next(response.accessToken);
         this.router.navigate(['/chat'])
       }
     }, (error: any) => {
@@ -56,7 +56,7 @@ export class AuthenticationService {
         localStorage.removeItem('token');
         localStorage.removeItem('userData');
         this.isLoggedIn.next(false);
-        this.router.navigate(['/']);
+        this.router.navigate(['']);
       }
     });
   }

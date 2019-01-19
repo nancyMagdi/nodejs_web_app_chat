@@ -14,7 +14,7 @@ import { ChatComponent } from './components/chat/chat.component';
 import { SharedModule } from './shared/shared.module';
 import { MainContainerComponent } from './components/main-container/main-container.component' ;
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const tokenInterceptorOptions = {
   provide: HTTP_INTERCEPTORS,
@@ -34,6 +34,7 @@ const tokenInterceptorOptions = {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
