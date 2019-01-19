@@ -1,0 +1,15 @@
+<div class="form-container">
+  <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+
+    <mat-form-field class="example-full-width">
+      <input matInput formControlName="username" placeholder="Username" type="text" value="">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Password" formControlName="password" type="password" value="">
+    </mat-form-field>
+    <div class="clear"></div>
+    <a href="/signup">Sign up</a>
+    <button type="submit" class="controller-btn">Log In </button>
+  </form>
+</div>
