@@ -13,7 +13,7 @@ module.exports = function (sequelize, Sequelize) {
       type: Sequelize.BIGINT,
       allowNull: false
     },
-    SeconUserId: {
+    SecondUserId: {
       type: Sequelize.BIGINT,
       allowNull: false
     }

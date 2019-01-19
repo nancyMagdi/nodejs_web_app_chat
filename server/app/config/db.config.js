@@ -27,14 +27,16 @@ db.chatHistory = require('../model/chats_history.js')(sequelize, Sequelize);
 db.chatThread = require('../model/chat_threads.js')(sequelize, Sequelize);
 
 // adding relations 
-db.chatHistory.belongsTo(db.chatThread, {foreignKey: 'ChatThreadId'});
+
 db.contactList.belongsTo(db.user, {foreignKey: 'FirstUserId'});
 db.contactList.belongsTo(db.user, {foreignKey: 'SecondUserId'});
+
+db.chatThread.hasMany(db.chatHistory, {foreignKey: 'ChatThreadId', sourceKey: 'Id'});
 
 db.chatThread.belongsTo(db.user, {foreignKey: 'FirstUserId'});
 db.chatThread.belongsTo(db.user, {foreignKey: 'SecondUserId'});
 
-db.chatHistory.belongsTo(db.user, {foreignKey: 'SenderUserId'});
-db.chatHistory.belongsTo(db.user, {foreignKey: 'ReciverUserId'});
+db.chatHistory.belongsTo(db.user, {foreignKey: 'FromUserId'});
+db.chatHistory.belongsTo(db.user, {foreignKey: 'ToUserId'});
 
 module.exports = db;

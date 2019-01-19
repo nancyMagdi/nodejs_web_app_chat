@@ -3,7 +3,7 @@ const config = require('../config/config.js');
 const ROLEs = config.ROLEs; 
 const User = db.user;
 
-checkDuplicateUserNameOrEmail = (req, res, next) => {
+checkDuplicateUserName = (req, res, next) => {
 	// -> Check Username is already in use
 	User.findOne({
 		where: {
@@ -19,6 +19,6 @@ checkDuplicateUserNameOrEmail = (req, res, next) => {
 }
 
 const signUpVerify = {};
-signUpVerify.checkDuplicateUserNameOrEmail = checkDuplicateUserNameOrEmail;
+signUpVerify.checkDuplicateUserName = checkDuplicateUserName;
 
 module.exports = signUpVerify;
