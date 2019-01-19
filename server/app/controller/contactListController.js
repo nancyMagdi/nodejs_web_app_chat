@@ -13,13 +13,13 @@ exports.getUserContactList = (req, res) => {
         raw: true
     }).then(users => {
         res.status(200).json({
-            "description": "User Content Page",
-            "users": users
+            Success: true,
+            data: users
         });
     }).catch(err => {
         res.status(500).json({
-            "description": "Can not access user contact list",
-            "error": err
+            Success: false,
+            Messge: "Fail! Error -> " + err
         });
     });
 }
@@ -48,8 +48,14 @@ exports.addToUserContactList = (req, res) => {
             plain: true
         }))
         console.log(created)
-        res.send("User is added to contact list successfully!");
+        res.status(200).json({
+            Success: true,
+            Messge: "User is added to contact list successfully!"
+        });
     }).catch(err => {
-        res.status(500).send("Fail! Error -> " + err);
+        res.status(500).json({
+            Success: "false",
+            Messge: "Fail! Error -> " + err
+        });
     })
 }

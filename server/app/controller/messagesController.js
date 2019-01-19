@@ -16,13 +16,13 @@ exports.getUserContactListChatHistory = (req, res) => {
         raw: true
     }).then(users => {
         res.status(200).json({
-            "description": "User Content Page",
-            "users": users
+            Success: true,
+            data: users
         });
     }).catch(err => {
         res.status(500).json({
-            "description": "Can not access user contact list",
-            "error": err
+            Success: false,
+            data: err
         });
     });
 }
@@ -48,13 +48,13 @@ exports.getUsersChatHistory = (req, res) => {
         raw: true
     }).then(users => {
         res.status(200).json({
-            "description": "User Content Page",
-            "users": users
+            Success: true,
+            data: users
         });
     }).catch(err => {
         res.status(500).json({
-            "description": "Can not access user contact list",
-            "error": err
+            Success: false,
+            data: err
         });
     });
 }
