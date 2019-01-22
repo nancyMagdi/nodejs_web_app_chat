@@ -1,3 +1,23 @@
-<p>
-  main-container works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="row">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-primary" (click)="changeView(sideMenuItems.displayChatList)">Contact
+            History chat</button>
+          <button type="button" class="btn btn-primary" (click)="changeView(sideMenuItems.displayContactList)">Contact
+            list </button>
+          <button type="button" class="btn btn-primary" (click)="changeView(sideMenuItems.displaySearachList)">Search</button>
+        </div>
+
+        <div *ngIf="displaySearchField">
+          <input matInput placeholder="Search by full name or username" type="search" value="">
+        </div>
+        <client-contact-list [contactsListObject]="contactsListObject" (openContactChat)="openContactChat($event)"></client-contact-list>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <client-chat [otherUserId]="otherUserId"></client-chat>
+    </div>
+  </div>
+</div>

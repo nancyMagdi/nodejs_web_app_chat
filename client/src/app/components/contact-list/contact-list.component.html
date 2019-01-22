@@ -1,0 +1,9 @@
+<div class="list-group">
+    <a *ngFor="let item of contactsListObject" (click)="openChatHistory(item.SecondUserId)" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{item.user.FullName}}</h5>
+            <small>{{item.user.LastLoginTime}}</small>
+        </div>
+        <small class="mb-1">Message text(under construction)</small>
+    </a>
+</div>
