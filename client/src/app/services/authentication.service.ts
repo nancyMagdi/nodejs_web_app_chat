@@ -21,16 +21,19 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient, private router: Router, private userService: UserService) {
     this.isLoggedIn = new BehaviorSubject(false);
-		this.userToken = new BehaviorSubject<string>(localStorage.getItem("token"));
-		this.loginError = new BehaviorSubject(null);
+    this.userToken = new BehaviorSubject<string>(localStorage.getItem("token"));
+    this.loginError = new BehaviorSubject(null);
 
     this.userTokenHandler();
   }
   //Login 
   public login(userInput: any) {
+    console.log(userInput);
+    localStorage.setItem('username', userInput.username);
     this.http.post('/auth/signin', userInput).subscribe((response: any) => {
-      if (response.auth) {
-        this.userToken.next(response.accessToken);
+      if (response.Success) {
+        this.userToken.next(response.accessToken);        
+        //TODO  start the socket service 
         this.router.navigate(['/chat'])
       }
     }, (error: any) => {
@@ -47,14 +50,15 @@ export class AuthenticationService {
     this.userToken.subscribe(token => {
 
       if (token != null) {
-        if (token != localStorage.getItem('token') && this.userService) {
+        if (this.userService) {
           localStorage.setItem('token', token);
-          //   this.userDataService.getMydata();
+          var username = localStorage.getItem('username');
+          this.userService.getUserdata(username);
         }
         this.isLoggedIn.next(true)
       } else {
         localStorage.removeItem('token');
-        localStorage.removeItem('userData');
+        localStorage.removeItem('currentUser');
         this.isLoggedIn.next(false);
         this.router.navigate(['']);
       }
