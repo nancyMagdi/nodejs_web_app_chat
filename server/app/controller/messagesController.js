@@ -13,7 +13,7 @@ exports.getUserContactListChatHistory = (req, res) => {
             model: User,
             attributes: { exclude: ["Password","Username"]}
         } ],      
-        raw: true
+       // raw: true
     }).then(users => {
         res.status(200).json({
             Success: true,
@@ -45,7 +45,7 @@ exports.getUsersChatHistory = (req, res) => {
         },
         include: [ ChatHistory ],
         order: [ [ChatHistory, 'CreationDateTime' ,'DESC'] ] ,      
-        raw: true
+      //  raw: true
     }).then(users => {
         res.status(200).json({
             Success: true,

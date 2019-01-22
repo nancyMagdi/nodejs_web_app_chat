@@ -10,7 +10,7 @@ exports.getUserContactList = (req, res) => {
             [Op.or]: [{ FirstUserId: req.params.userId, }, { SecondUserId: req.params.userId, }]
         },
         include: [User],
-        raw: true
+     //   raw: true
     }).then(users => {
         res.status(200).json({
             Success: true,

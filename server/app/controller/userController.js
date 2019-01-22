@@ -63,8 +63,8 @@ exports.signin = (req, res) => {
 
 exports.userContent = (req, res) => {
     User.findOne({
-        where: { id: req.params.userId },
-        attributes: ['FullName', 'Username', 'Status', 'Image'],
+        where: { Username: req.params.userName },
+        attributes: ["Id",'FullName', 'Username', 'Status', 'Image'],
     }).then(user => {
         res.status(200).json({
             Success: true,
