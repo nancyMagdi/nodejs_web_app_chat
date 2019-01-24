@@ -30,9 +30,9 @@ module.exports = function(sequelize, Sequelize) {
       allowNull: false,
       defaultValue: '0'
     },
-    LastLoginTime: {
-      type: Sequelize.DATE,
-      allowNull: false
+    SocketId: {
+      type: Sequelize.STRING(200),
+      allowNull: true
     }
   }, {
     tableName: 'users'
