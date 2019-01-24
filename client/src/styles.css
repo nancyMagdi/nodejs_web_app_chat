@@ -1,1 +1,12 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+body {
+
+    min-height: 100vh;
+    background: #20c3b4;
+    /* font-family: "proxima-nova", "Source Sans Pro", sans-serif; */
+    font-size: 1em;
+    letter-spacing: 0.1px;
+    color: c10c9cc;
+    text-rendering: optimizeLegibility;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+    -webkit-font-smoothing: antialiased;
+}

@@ -1,0 +1,101 @@
+   .contact-list .expanded {
+    height: calc(100% - 334px);
+  }
+   .contact-list ::-webkit-scrollbar {
+    width: 8px;
+    background: #2c3e50;
+  }
+   .contact-list ::-webkit-scrollbar-thumb {
+    background-color: #243140;
+  }
+   .contact-list  ul li.contact-item {
+    position: relative;
+    padding: 10px 0 15px 0;
+    font-size: 0.9em;
+    cursor: pointer;
+  }
+  @media screen and (max-width: 735px) {
+     .contact-list  ul li.contact-item  {
+      padding: 6px 0 46px 8px;
+    }
+  }
+   .contact-list  ul li.contact-item:hover {
+    background: #e5e6e7;
+  }
+   .contact-list  ul li.contact.active {
+    background: #e5e6e7;
+    border-right: 5px solid #435f7a;
+  }
+   .contact-list  ul li.contact-item.active span.contact-status {
+    border: 2px solid #32465a !important;
+  }
+   .contact-list  ul li.contact-item .wrap {
+    width: 88%;
+    margin: 0 auto;
+    position: relative;
+  }
+  @media screen and (max-width: 735px) {
+     .contact-list  ul li.contact-item .wrap {
+      width: 100%;
+    }
+  }
+   .contact-list  ul li.contact-item .wrap span.contact-status {
+    position: absolute;
+    left: 0;
+    margin: -2px 0 0 -2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #2c3e50;
+    background: #95a5a6;
+  }
+   .contact-list  ul li.contact-item .wrap span.online {
+    background: #2ecc71;
+  }
+
+   .contact-list  ul li.contact-item .wrap span.offline {
+    background: #e74c3c;
+  }
+   .contact-list  ul li.contact-item .wrap img {
+    width: 40px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 10px;
+  }
+  @media screen and (max-width: 735px) {
+     .contact-list  ul li.contact-item .wrap img {
+      margin-right: 0px;
+    }
+  }
+   .contact-list  ul li.contact-item .wrap .meta {
+    padding: 5px 0 0 0;
+  }
+  @media screen and (max-width: 735px) {
+     .contact-list  ul li.contact-item .wrap .meta {
+      display: none;
+    }
+  }
+   .contact-list  ul li.contact-item .wrap .meta .name {
+    font-weight: 600;
+  }
+   .contact-list  ul li.contact-item .wrap .meta .preview {
+    margin: 5px 0 0 0;
+    padding: 0 0 1px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -moz-transition: 1s all ease;
+    -o-transition: 1s all ease;
+    -webkit-transition: 1s all ease;
+    transition: 1s all ease;
+  }
+   .contact-list  ul li.contact-item .wrap .meta .preview span {
+    position: initial;
+    border-radius: initial;
+    background: none;
+    border: none;
+    padding: 0 2px 0 0;
+    margin: 0 0 0 1px;
+    opacity: .5;
+  }

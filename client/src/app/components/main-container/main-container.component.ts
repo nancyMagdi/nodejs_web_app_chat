@@ -37,6 +37,7 @@ export class MainContainerComponent implements OnInit {
     this.otherUserId = contactId;
   }
   public changeView(viewToDisplay: listViewEnum) {
+    console.log(viewToDisplay);
     this.loading = true;
     this.contactsListObject = null;
     switch (viewToDisplay) {

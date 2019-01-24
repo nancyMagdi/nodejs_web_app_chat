@@ -1,23 +1,21 @@
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-      <div class="row">
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-primary" (click)="changeView(sideMenuItems.displayChatList)">Contact
-            History chat</button>
-          <button type="button" class="btn btn-primary" (click)="changeView(sideMenuItems.displayContactList)">Contact
-            list </button>
-          <button type="button" class="btn btn-primary" (click)="changeView(sideMenuItems.displaySearachList)">Search</button>
-        </div>
+<div id=frame>
+  <div class="side-menu-container">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn btn-light" (click)="changeView(sideMenuItems.displayChatList)">
+        <img src="assets/img/chat-history.png">
+      </button>
+      <button type="button" class="btn btn btn-light" (click)="changeView(sideMenuItems.displayContactList)">
+        <i class="fa fa-user fa-fw fa-lg" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="btn btn btn-light" (click)="changeView(sideMenuItems.displaySearachList)">
+          <i class="fa fa-search fa-lg" aria-hidden="true"></i>
+      </button>
+    </div>
 
-        <div *ngIf="displaySearchField">
-          <input matInput placeholder="Search by full name or username" type="search" value="">
-        </div>
-        <client-contact-list [contactsListObject]="contactsListObject" (openContactChat)="openContactChat($event)"></client-contact-list>
-      </div>
+    <div *ngIf="displaySearchField">
+      <input matInput placeholder="Search by full name or username" type="search" id="search" value="">
     </div>
-    <div class="col-sm-8">
-      <client-chat [otherUserId]="otherUserId"></client-chat>
-    </div>
+    <client-contact-list [contactsListObject]="contactsListObject" (openContactChat)="openContactChat($event)"></client-contact-list>
   </div>
+  <client-chat [otherUserId]="otherUserId"></client-chat>
 </div>
