@@ -9,13 +9,30 @@ exports.getUserContactList = (req, res) => {
         where: {
             [Op.or]: [{ FirstUserId: req.params.userId, }, { SecondUserId: req.params.userId, }]
         },
-        include: [User],
-     //   raw: true
-    }).then(users => {
-        res.status(200).json({
-            Success: true,
-            data: users
+        raw: true
+    }).then(usersTherad => {
+        var resultArray = [];
+        usersTherad.forEach(item => {
+            if (item.FirstUserId == req.params.userId) {
+                resultArray.push(item.SecondUserId);
+            } else {
+                resultArray.push(item.FirstUserId);
+            }
         });
+        User.findAll({
+            attributes: { exclude: ["Password", "Username"] },
+            where: {
+                Id: {
+                    [Op.in]: resultArray 
+                }
+            },
+            raw: true
+        }).then(users => {
+            res.status(200).json({
+                Success: true,
+                data: users
+            });
+        })
     }).catch(err => {
         res.status(500).json({
             Success: false,
@@ -42,7 +59,7 @@ exports.addToUserContactList = (req, res) => {
                 }
             ]
         },
-        defaults: { FirstUserId: req.body.userId, SecondUserId: req.body.connectToUserId,isConnected:1 }
+        defaults: { FirstUserId: req.body.userId, SecondUserId: req.body.connectToUserId, isConnected: 1 }
     }).spread((user, created) => {
         console.log(user.get({
             plain: true
@@ -58,4 +75,18 @@ exports.addToUserContactList = (req, res) => {
             Messge: "Fail! Error -> " + err
         });
     })
+}
+
+exports.getOnlineContactForUser = (userId) => {
+    UserContactList.findAll({
+        attributes: { exclude: ["SecondUserId", "FirstUserId", "Id"] },
+        where: {
+            [Op.or]: [{ FirstUserId: userId, }, { SecondUserId: userId, }]
+        },
+        include: [{
+            model: User,
+            where: { Status: 1 },
+            attributes: ["SocketId"]
+        }]
+    }).then(users => { return users; }).catch(err => { return err; });
 }

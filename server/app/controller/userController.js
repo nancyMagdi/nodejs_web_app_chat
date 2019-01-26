@@ -47,12 +47,7 @@ exports.signin = (req, res) => {
         var token = jwt.sign({ id: user.id }, config.secret, {
             expiresIn: 86400 // expires in 24 hours
         });
-        user.update({
-            Status: 0
-        }).then(() => {
-            res.status(200).send({ Success: true, accessToken: token });
-        });
-
+        res.status(200).send({ Success: true, accessToken: token });
     }).catch(err => {
         res.status(500).json({
             Success: false,
@@ -64,7 +59,7 @@ exports.signin = (req, res) => {
 exports.userContent = (req, res) => {
     User.findOne({
         where: { Username: req.params.userName },
-        attributes: ["Id",'FullName', 'Username', 'Status', 'Image'],
+        attributes: ["Id", 'FullName', 'Username', 'Status', 'Image','SocketId'],
     }).then(user => {
         res.status(200).json({
             Success: true,
@@ -92,7 +87,8 @@ exports.signout = (req, res) => {
             });
         }
         user.update({
-            Status: 0
+            Status: 0,
+            SocketId :null
         }).then(() => {
             res.status(200).send({ Success: false, accessToken: "" });
         });
@@ -102,4 +98,11 @@ exports.signout = (req, res) => {
             "data": 'Error -> ' + err
         });
     });
+}
+
+exports.addSocketId = (userName, userSocketId) => {
+    return User.update(
+        { SocketId: userSocketId,Status:1 },
+        { where: { Username: userName } }
+    );
 }

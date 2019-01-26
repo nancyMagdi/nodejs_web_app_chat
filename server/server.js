@@ -6,7 +6,7 @@ const socketio = require('socket.io');
 
 const db = require('./app/config/db.config.js');
 const routes = require('./app/router/router')
-//const socketEvents = require('./utils/socket');
+const socketEvents = require('./app/services/socket.js');
 
 class Server {
 
@@ -47,7 +47,7 @@ class Server {
   /* Including app Routes starts*/
   includeRoutes() {
     new routes(this.app).routesConfig();
-  //  new socketEvents(this.socket).socketConfig();
+    new socketEvents(this.socket).socketConfig();
   }
   /* Including app Routes ends*/
 
@@ -60,7 +60,7 @@ class Server {
       console.log("App listening at http://%s:%s", host, port)
     });
     
-  //  var io = require('socket.io').listen(server);
+    //var io = require('socket.io').listen(server);
     this.socket = socketio(server);
     this.appConfig();
     this.includeRoutes();
