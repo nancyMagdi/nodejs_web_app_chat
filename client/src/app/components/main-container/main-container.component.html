@@ -15,7 +15,7 @@
     <div *ngIf="displaySearchField">
       <input matInput placeholder="Search by full name or username" type="search" id="search" value="">
     </div>
-    <client-contact-list [contactsListObject]="contactsListObject" (openContactChat)="openContactChat($event)"></client-contact-list>
+    <client-contact-list [contactsListObject]="contactsListObject" [typeOfList]="displayedListType" (openContactChat)="openContactChat($event)"></client-contact-list>
   </div>
-  <client-chat [otherUserId]="otherUserId"></client-chat>
+  <client-chat [userInfo]="userInfo" [inputUserId]="otherUserId"></client-chat>
 </div>

@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Router } from '@angular/router';
 import { UserService } from "../services/user.service";
 import { HttpClient } from '@angular/common/http';
-
+import {SocketService} from '../services/socket.service';
 export interface ApiResponse {
   status: number
   data: string
@@ -19,7 +19,7 @@ export class AuthenticationService {
   public isLoggedIn: BehaviorSubject<Boolean>;
   public loginError: BehaviorSubject<any>;
 
-  constructor(private http: HttpClient, private router: Router, private userService: UserService) {
+  constructor(private http: HttpClient, private router: Router, private userService: UserService,private socketSerer: SocketService) {
     this.isLoggedIn = new BehaviorSubject(false);
     this.userToken = new BehaviorSubject<string>(localStorage.getItem("token"));
     this.loginError = new BehaviorSubject(null);
@@ -32,6 +32,7 @@ export class AuthenticationService {
     localStorage.setItem('username', userInput.username);
     this.http.post('/auth/signin', userInput).subscribe((response: any) => {
       if (response.Success) {
+        this.socketSerer.connectSocketServer(userInput.username);
         this.userToken.next(response.accessToken);        
         //TODO  start the socket service 
         this.router.navigate(['/chat'])

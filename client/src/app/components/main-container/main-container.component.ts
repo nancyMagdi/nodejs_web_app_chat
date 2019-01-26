@@ -20,7 +20,9 @@ export class MainContainerComponent implements OnInit {
   public contactsListObject: any[];
   public loading: boolean = false;
   public displaySearchField: boolean = false;
-
+  public displayedListType: number;
+  public userInfo :any;
+  
   constructor(private contactListservice: ContactListService) {
     this.sideMenuItems = listViewEnum;
   }
@@ -34,12 +36,17 @@ export class MainContainerComponent implements OnInit {
   */
   public openContactChat(contactId: number) {
     console.log(contactId);
+    // filter the user info 
+    let index = this.contactsListObject.findIndex(element => element.Id === contactId);
+    this.userInfo = this.contactsListObject[index];
+    console.log(this.userInfo);
     this.otherUserId = contactId;
   }
   public changeView(viewToDisplay: listViewEnum) {
     console.log(viewToDisplay);
     this.loading = true;
     this.contactsListObject = null;
+    this.displayedListType = viewToDisplay;
     switch (viewToDisplay) {
       case listViewEnum.displayChatList:
         this.displaySearchField = false;

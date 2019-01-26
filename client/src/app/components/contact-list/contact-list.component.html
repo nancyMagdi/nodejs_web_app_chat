@@ -1,17 +1,19 @@
 <div class="contact-list">
     <ul>
-        <li *ngFor="let item of contactsListObject" (click)="openChatHistory(item.SecondUserId)" class="contact-item">
-            <div class="wrap">
+        <li *ngFor="let item of contactsListObject" (click)="openChatHistory(item.Id,item.SocketId)" class="contact-item">
+            <div class="wrap" [ngClass]="{'activeChat':activeUser== item.Id}">
+                <p *ngIf="typeOfList==1" class="font-small-3 float-right primary">{{item.message.date}}</p>
                 <div class="float-left">
-                    <span class="contact-status" [ngClass]="{'online':item.user.Status==1 , 'offline':item.user.Status==0}"></span>
+                    <span class="contact-status" [ngClass]="{'online':item.Status==1 , 'offline':item.Status==0}"></span>
                     <img src="http://emilcarlsson.se/assets/louislitt.png" alt="">
                 </div>
                 <div class="meta">
                     <h6 class="name">
-                        {{item.user.FullName}}
-                        <span class="font-small-3 float-right primary">4:14 AM</span>
+                        {{item.FullName}}
+                        <span *ngIf="typeOfList==1" class="font-small-3 float-right primary">3</span>
                     </h6>
-                    <p class="preview">Message text(under construction).</p>
+                    <button *ngIf="typeOfList==3"><i class="fa fa-user-plus"></i></button>
+                    <p *ngIf="typeOfList==1" class="preview">{{item.message.message}}</p>
                 </div>
             </div>
         </li>

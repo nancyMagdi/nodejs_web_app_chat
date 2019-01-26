@@ -16,11 +16,13 @@ import { MainContainerComponent } from './components/main-container/main-contain
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
 const tokenInterceptorOptions = {
   provide: HTTP_INTERCEPTORS,
   useClass: HttpInterceptorHelper,
   multi: true
 }
+
 
 @NgModule({  
   declarations: [
@@ -39,7 +41,7 @@ const tokenInterceptorOptions = {
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
   ],  
   providers: [
     tokenInterceptorOptions,

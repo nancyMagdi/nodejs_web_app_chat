@@ -99,3 +99,7 @@
     margin: 0 0 0 1px;
     opacity: .5;
   }
+
+  .activeChat{
+    background: #c9c9cc;
+  }

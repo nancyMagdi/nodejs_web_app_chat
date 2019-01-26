@@ -10,7 +10,7 @@ export class MessagesService {
     this.curerntUserObject = JSON.parse(localStorage.getItem("currentUser"));
   }
 
-  getChatHistory(secondUserId: number) {
+  getChatHistory(secondUserId: number, limit: number , offset : number ) {
     let promise = new Promise((resolve, reject) => {
       this.http.get("/messages/getUsersChatHistory/" + this.curerntUserObject.id+"/"+secondUserId).subscribe((ret: any) => {
         resolve(ret.data);
