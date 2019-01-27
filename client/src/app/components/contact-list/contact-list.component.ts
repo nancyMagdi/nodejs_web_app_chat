@@ -36,7 +36,7 @@ export class ContactListComponent implements OnInit {
     this.socketService.socketOn("user-logged-in", (response) => {
       if (this.contactsListObject.length > 0) {
         var index = this.contactsListObject.findIndex(element => element.Id == response.loggedinUserId)
-        console.log(this.contactsListObject);
+        console.log("Index at login"+index);
         if (index >= 0) {
           this.contactsListObject[index].Status = 1;
           this.contactsListObject[index].SocketId = response.loggedinUserSoketId;
@@ -47,7 +47,8 @@ export class ContactListComponent implements OnInit {
 
     this.socketService.socketOn("logout", (response) => {
       if (this.contactsListObject.length > 0) {
-        var index = this.contactsListObject.findIndex(element => element.Id == response.loggedinUserId)
+        var index = this.contactsListObject.findIndex(element => element.Id == response.loggedinUserId);
+        console.log("Index at login"+index);
         if (index >= 0) {
           this.contactsListObject[index].Status = 0;
           this.contactsListObject[index].SocketId = null;
