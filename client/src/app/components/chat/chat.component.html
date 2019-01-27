@@ -1,22 +1,24 @@
 <div class="content">
 	<div class="contact-profile">
 		<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="">
-		<p>{{userInfo.FullName}}</p>
+		<p>{{userInfoName}}</p>
 		<div class="social-media">
 		</div>
 	</div>
 	<div class="messages">
 		<ul>
-			<li *ngFor="let item of chatHistory" [ngClass]="{'sent':item.FromUserId== userInfo.Id, 'replies':item.ToUserId==userInfo.Id}">				
-				<p>{{item.messageText}}</p>
+			<li *ngFor="let item of chatHistory" [ngClass]="{'sent':item.FromUserId== userInfo.Id, 'replies':item.ToUserId==userInfo.Id}">
+				<p>{{item.MessageText}}</p>
 			</li>
 		</ul>
 	</div>
 	<div class="message-input">
 		<div class="wrap">
-			<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-			<input type="text" placeholder="Write your message...">
-			<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+			<form  [formGroup]="sendMessageForm" (ngSubmit)="sendMessage(sendMessageForm.value)">
+				<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+				<input formControlName="message"  type="text" placeholder="Write your message...">
+				<button class="submit" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+			</form>
 		</div>
 	</div>
 </div>

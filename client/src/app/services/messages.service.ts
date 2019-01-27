@@ -7,7 +7,11 @@ import { HttpClient } from '@angular/common/http';
 export class MessagesService {
   private curerntUserObject: any;
   constructor(private http: HttpClient) {
-    this.curerntUserObject = JSON.parse(localStorage.getItem("currentUser"));
+   let currentUser =localStorage.getItem("currentUser")
+    if(currentUser){
+      this.curerntUserObject = JSON.parse(currentUser);
+    }
+    
   }
 
   getChatHistory(secondUserId: number, limit: number , offset : number ) {

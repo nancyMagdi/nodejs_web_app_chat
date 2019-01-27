@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  save(value: any) {
+  public save(value: any) {
     if (this.signupForm.valid) {
       this.regestrationService.addUser(value).then((data: any) => {
         if (data != null) {          

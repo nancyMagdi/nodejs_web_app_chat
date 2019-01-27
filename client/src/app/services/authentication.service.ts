@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Router } from '@angular/router';
 import { UserService } from "../services/user.service";
 import { HttpClient } from '@angular/common/http';
-import {SocketService} from '../services/socket.service';
+
 export interface ApiResponse {
   status: number
   data: string
@@ -19,7 +19,7 @@ export class AuthenticationService {
   public isLoggedIn: BehaviorSubject<Boolean>;
   public loginError: BehaviorSubject<any>;
 
-  constructor(private http: HttpClient, private router: Router, private userService: UserService,private socketSerer: SocketService) {
+  constructor(private http: HttpClient, private router: Router, private userService: UserService) {
     this.isLoggedIn = new BehaviorSubject(false);
     this.userToken = new BehaviorSubject<string>(localStorage.getItem("token"));
     this.loginError = new BehaviorSubject(null);
@@ -31,9 +31,8 @@ export class AuthenticationService {
     console.log(userInput);
     localStorage.setItem('username', userInput.username);
     this.http.post('/auth/signin', userInput).subscribe((response: any) => {
-      if (response.Success) {
-        this.socketSerer.connectSocketServer(userInput.username);
-        this.userToken.next(response.accessToken);        
+      if (response.Success) {        
+        this.userToken.next(response.accessToken);
         //TODO  start the socket service 
         this.router.navigate(['/chat'])
       }
@@ -60,11 +59,13 @@ export class AuthenticationService {
       } else {
         localStorage.removeItem('token');
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('username');
         this.isLoggedIn.next(false);
         this.router.navigate(['']);
       }
     });
   }
+
   public isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     if (token) {
@@ -73,4 +74,9 @@ export class AuthenticationService {
     return false;
   }
 
+  public logout() {
+    this.userService.clearUserData();
+    this.userToken.next(null);
+    this.router.navigate[""];
+  }
 }

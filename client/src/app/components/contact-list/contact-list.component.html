@@ -10,7 +10,8 @@
                 <div class="meta">
                     <h6 class="name">
                         {{item.FullName}}
-                        <span *ngIf="typeOfList==1" class="font-small-3 float-right primary">3</span>
+                        <span *ngIf="typeOfList==1 && item.message.unreadCount > 0" 
+                            class="font-small-3 float-right notification">{{item.message.unreadCount}}</span>
                     </h6>
                     <button *ngIf="typeOfList==3"><i class="fa fa-user-plus"></i></button>
                     <p *ngIf="typeOfList==1" class="preview">{{item.message.message}}</p>

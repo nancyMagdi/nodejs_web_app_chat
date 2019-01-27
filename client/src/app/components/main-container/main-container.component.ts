@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { ContactListService } from '../../services/contact-list.service';
-
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication.service';
+import { SocketService } from '../../services/socket.service';
+import {UserService} from "../../services/user.service";
 export enum listViewEnum {
   displayChatList = 1,
   displayContactList = 2,
@@ -21,14 +24,21 @@ export class MainContainerComponent implements OnInit {
   public loading: boolean = false;
   public displaySearchField: boolean = false;
   public displayedListType: number;
-  public userInfo :any;
-  
-  constructor(private contactListservice: ContactListService) {
-    this.sideMenuItems = listViewEnum;
+  public userInfo: any;
+  public curerntUserObject:any ;
+  constructor(private contactListservice: ContactListService, private router: Router,
+    private authService: AuthenticationService, private socketService: SocketService ,private userDataService: UserService) {
+    this.sideMenuItems = listViewEnum;   
   }
 
   ngOnInit() {
     this.changeView(listViewEnum.displayChatList);
+    this.userDataService.userData.subscribe((data) => {
+      if (data != null) {
+        console.log(data);
+        this.curerntUserObject = data;
+      }
+    })
   }
 
   /*
@@ -42,6 +52,7 @@ export class MainContainerComponent implements OnInit {
     console.log(this.userInfo);
     this.otherUserId = contactId;
   }
+
   public changeView(viewToDisplay: listViewEnum) {
     console.log(viewToDisplay);
     this.loading = true;
@@ -78,5 +89,10 @@ export class MainContainerComponent implements OnInit {
         this.loading = false;
         break;
     }
+  }
+
+  public logout() {
+    this.socketService.socketEmit("logout", { id: this.curerntUserObject.id });
+    this.authService.logout();
   }
 }

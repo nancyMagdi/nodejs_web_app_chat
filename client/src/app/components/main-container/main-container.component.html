@@ -1,5 +1,13 @@
 <div id=frame>
   <div class="side-menu-container">
+      <div class="contact-profile">
+          <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="">
+          <p>{{curerntUserObject.full_name}}</p>
+          <div class="social-media">
+              <i class="fa fa-sign-out-alt float-right" aria-hidden="true" (click)="logout()">logout</i>
+          </div>
+        </div>
+
     <div class="btn-group" role="group">
       <button type="button" class="btn btn btn-light" (click)="changeView(sideMenuItems.displayChatList)">
         <img src="assets/img/chat-history.png">
