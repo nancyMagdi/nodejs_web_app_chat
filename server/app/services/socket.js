@@ -10,117 +10,84 @@ class Socket {
     }
 
     socketEvents() {
-       /*
+
         this.io.on('connection', (socket) => {
-
-            /**
-            * get the user's Chat list
-            
-            socket.on('chat-list', async (userId) => {
-
-                let chatListResponse = {};
-
-                if (userId === '' && (typeof userId !== 'string' || typeof userId !== 'number')) {
-
-                    chatListResponse.error = true;
-                    chatListResponse.message = `User does not exits.`;
-
-                    this.io.emit('chat-list-response', chatListResponse);
-                } else {
-                    const result = await helper.getChatList(userId, socket.id);
-                    this.io.to(socket.id).emit('chat-list-response', {
-                        error: result !== null ? false : true,
-                        singleUser: false,
-                        chatList: result.chatlist
-                    });
-
-                    socket.broadcast.emit('chat-list-response', {
-                        error: result !== null ? false : true,
-                        singleUser: true,
-                        chatList: result.userinfo
-                    });
-                }
-            });
             /**
             * send the messages to the user
-            
-            socket.on('add-message', async (data) => {
-
-                if (data.message === '') {
-
+            */
+            socket.on('Message-sent', async (data) => {
+                if (data.messageText === '') {
                     this.io.to(socket.id).emit(`add-message-response`, `Message cant be empty`);
-
-                } else if (data.fromUserId === '') {
-
+                } else if (data.FromUserId === '') {
                     this.io.to(socket.id).emit(`add-message-response`, `Unexpected error, Login again.`);
-
-                } else if (data.toUserId === '') {
-
+                } else if (data.ToUserId === '') {
                     this.io.to(socket.id).emit(`add-message-response`, `Select a user to chat.`);
-
                 } else {
-                    let toSocketId = data.toSocketId;
-                    const sqlResult = await helper.insertMessages({
-                        fromUserId: data.fromUserId,
-                        toUserId: data.toUserId,
-                        message: data.message
-                    });
-                    this.io.to(toSocketId).emit(`add-message-response`, data);
+                    // save message to db
+                    var created = new Date();
+                    var savedData = {
+                        FromUserId: data.fromUserId,
+                        ToUserId: data.toUserId,
+                        MessageText: data.messageText.message,
+                        CreationDateTime: created,
+                        ChatThreadId: null,
+                        IsRead: 0
+                    }
+                    const userThread = await messagesController.insertThread(savedData);
+                    // check if the user is online 
+                    if (userThread && userThread[0] !== null) {
+                        var userThreadData = userThread[0].get({ plain: true });
+                        savedData.ChatThreadId = userThreadData.Id
+                        // get the user data 
+                        const userData = await userController.getUSerStatus(data.toUserId);
+                        if (userData && userData != null) {
+                            // save the message 
+                            savedData.IsRead = userData.Status;
+                            messagesController.insertMessages(savedData);
+                            // send the message to the socket for the user 
+                            if (userData.Status == 1) {
+                                let toSocketId = userData.SocketId;
+                                this.io.to(toSocketId).emit('message-received', savedData);
+                            }
+
+                        }
+
+                    }
                 }
             });
 
 
             /**
             * Logout the user
-           
-            socket.on('logout', async () => {
-                const isLoggedOut = await helper.logoutUser(socket.id);
-                this.io.to(socket.id).emit('logout-response', {
-                    error: false
+           */
+            socket.on('logout', (data) => {
+                userController.signout(data.id);
+                socket.broadcast.emit('logout', {
+                    error: false,
+                    userDisconnected: true,
+                    loggedinUserId: data.id
                 });
-                socket.disconnect();
             });
-            */
-
-            /**
-            * sending the disconnected user to all socket users. 
-            
-            socket.on('disconnect', async () => {
-                const isLoggedOut = await helper.logoutUser(socket.id);
-                setTimeout(async () => {
-                    const isLoggedOut = await helper.isUserLoggedOut(socket.id);
-                    if (isLoggedOut && isLoggedOut !== null) {
-                        socket.broadcast.emit('chat-list-response', {
-                            error: false,
-                            userDisconnected: true,
-                            socketId: socket.id
-                        });
-                    }
-                }, 1000);
-            });
-
         });
-        */
+
     }
 
     socketConfig() {
 
         this.io.use(async (socket, next) => {
-            let userName = socket.request._query['userName'];
+            let userId = socket.request._query['userId'];
             let userSocketId = socket.id;
-            const response = await userController.addSocketId(userName, userSocketId);
-            console.log(response);
+            const response = await userController.addSocketId(userId, userSocketId);
             if (response && response !== null) {
                 // emit that user has loged in
                 socket.broadcast.emit('user-logged-in', {
                     error: false,
                     userDisconnected: false,
-                    loggedinUserSoketId: userSocketId,
-                //    loggedInUserId: need to get the user id 
+                    loggedinUserId: userId,
                 });
                 next();
             } else {
-                console.error(`Socket connection failed, for  user Id ${userName}.`);
+                console.error(`Socket connection failed, for  user Id ${userId}.`);
             }
         });
 

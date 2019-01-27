@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-module.exports = function(sequelize, Sequelize) {
+module.exports = function (sequelize, Sequelize) {
   return sequelize.define('chats_history', {
     Id: {
       type: Sequelize.BIGINT,
@@ -8,15 +8,15 @@ module.exports = function(sequelize, Sequelize) {
       primaryKey: true,
       autoIncrement: true
     },
-    messageText: {
+    MessageText: {
       type: Sequelize.TEXT,
       allowNull: false
     },
-   
+
     ChatThreadId: {
       type: Sequelize.BIGINT,
       allowNull: false
-    },    
+    },
     FromUserId: {
       type: Sequelize.BIGINT,
       allowNull: false
@@ -32,8 +32,14 @@ module.exports = function(sequelize, Sequelize) {
     AttachementLocation: {
       type: Sequelize.STRING(300),
       allowNull: true
+    },
+    IsRead: {
+      type: Sequelize.INTEGER(2),
+      allowNull: false,
+      defaultValue: '0'
     }
-  }, {
-    tableName: 'chats_history'
-  });
+  },
+    {
+      tableName: 'chats_history'
+    });
 };

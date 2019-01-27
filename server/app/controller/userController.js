@@ -59,7 +59,7 @@ exports.signin = (req, res) => {
 exports.userContent = (req, res) => {
     User.findOne({
         where: { Username: req.params.userName },
-        attributes: ["Id", 'FullName', 'Username', 'Status', 'Image','SocketId'],
+        attributes: ["Id", 'FullName', 'Username', 'Status', 'Image', 'SocketId'],
     }).then(user => {
         res.status(200).json({
             Success: true,
@@ -73,36 +73,35 @@ exports.userContent = (req, res) => {
     })
 }
 
-exports.signout = (req, res) => {
-    console.log("Sign-In");
+exports.signout = (id) => {
+    console.log("Sign-out");
     User.findOne({
         where: {
-            Username: req.body.username
+            Id: id
         }
-    }).then(user => {
-        if (!user) {
-            return res.status(404).json({
-                Success: false,
-                data: "User Not Found"
-            });
-        }
+    }).then(user => {     
         user.update({
             Status: 0,
-            SocketId :null
+            SocketId: null
         }).then(() => {
-            res.status(200).send({ Success: false, accessToken: "" });
+           return true
         });
     }).catch(err => {
-        res.status(500).json({
-            Success: false,
-            "data": 'Error -> ' + err
-        });
+        console.log(err)
     });
 }
 
-exports.addSocketId = (userName, userSocketId) => {
+exports.addSocketId = (userId, userSocketId) => {
     return User.update(
-        { SocketId: userSocketId,Status:1 },
-        { where: { Username: userName } }
+        { SocketId: userSocketId, Status: 1 },
+        { where: { Id: userId } }
     );
+}
+
+exports.getUSerStatus = (userId) => {
+    return User.findOne({
+        where: { Id: userId },
+        attributes: ['Status', 'SocketId'],
+        raw: true
+    });
 }

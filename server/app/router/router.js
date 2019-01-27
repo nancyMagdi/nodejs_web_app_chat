@@ -23,8 +23,6 @@ class Routes {
         //Messages history 
         this.app.get('/api/messages/getContactChatHistory/:userId', [authJwt.verifyToken], messagesController.getUserContactListChatHistory);
         this.app.get('/api/messages/getUsersChatHistory/:loggedin/:secondUserId', [authJwt.verifyToken], messagesController.getUsersChatHistory);
-        // need speacial handling for sockets
-        // this.app.post('/api/messages/saveMessage', [authJwt.verifyToken], messagesController.addToUserContactList);
 
     }
     routesConfig() {
