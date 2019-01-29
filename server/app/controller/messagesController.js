@@ -45,6 +45,11 @@ exports.getUserContactListChatHistory = (req, res) => {
                     Success: true,
                     data: users
                 });
+            }).catch(err => {
+                res.status(500).json({
+                    Success: false,
+                    data: err
+                });
             });
         }).catch(err => {
             res.status(500).json({
