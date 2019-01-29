@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import {HttpModule} from '@angular/http';
 import {  HttpClientModule, HTTP_INTERCEPTORS,} from '@angular/common/http';
 import {HttpInterceptorHelper} from "./helpers/http-interceptor";
-import { HeaderBarComponent } from './components/header-bar/header-bar.component';
 import { ContactListComponent } from './components/contact-list/contact-list.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
@@ -27,7 +26,6 @@ const tokenInterceptorOptions = {
 @NgModule({  
   declarations: [
     AppComponent,
-    HeaderBarComponent,
     ContactListComponent,
     LoginComponent,
     SignupComponent,

@@ -1,4 +1,4 @@
-<div class="content">
+<div *ngIf="userInfo" class="content">
 	<div class="contact-profile">
 		<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="">
 		<p>{{userInfo?.FullName}}</p>
@@ -8,17 +8,21 @@
 	<div class="messages">
 		<ul>
 			<li *ngFor="let item of chatHistory" [ngClass]="{'sent':item.FromUserId== userInfo.Id, 'replies':item.ToUserId==userInfo.Id}">
-				<p>{{item.MessageText}}</p>
+				<p class="message">{{item.MessageText}}</p> <p class="date">{{setDate(item.CreationDateTime) | date :"shortTime"}}</p>
 			</li>
 		</ul>
 	</div>
 	<div class="message-input">
 		<div class="wrap">
 			<form  [formGroup]="sendMessageForm" (ngSubmit)="sendMessage(sendMessageForm.value)">
-				<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+				<i class="fa fa-paperclip attachment fa-lg float-left" aria-hidden="true"></i>
 				<input formControlName="message"  type="text" placeholder="Write your message...">
-				<button class="submit" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+				<button class="submit" class="btn" type="submit">Send</button>
 			</form>
 		</div>
 	</div>
+</div>
+
+<div *ngIf="!userInfo" class="content">
+	<p class="no-user-selected"> Select user to chat with </p>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { SocketService } from '../../services/socket.service'
+import { SocketService } from '../../services/socket.service';
+import { UserService } from '../../services/user.service';
 @Component({
   selector: 'client-contact-list',
   templateUrl: './contact-list.component.html',
@@ -26,17 +27,20 @@ export class ContactListComponent implements OnInit {
 
   private activeUser: number;
 
-  constructor(private socketService: SocketService, private cd: ChangeDetectorRef) {
-    
-  }
+  constructor(private socketService: SocketService, private cd: ChangeDetectorRef,
+     private userDataService: UserService) {}
 
-  ngOnInit() {this.listenToLogin(); }
+  ngOnInit() {
+    this.userDataService.userData.subscribe((data) => {
+      this.listenToLogin();
+    });
+  }
 
   public listenToLogin() {
     this.socketService.socketOn("user-logged-in", (response) => {
       if (this.contactsListObject.length > 0) {
         var index = this.contactsListObject.findIndex(element => element.Id == response.loggedinUserId)
-        console.log("Index at login"+index);
+        console.log("Index at login" + index);
         if (index >= 0) {
           this.contactsListObject[index].Status = 1;
           this.contactsListObject[index].SocketId = response.loggedinUserSoketId;
@@ -48,7 +52,7 @@ export class ContactListComponent implements OnInit {
     this.socketService.socketOn("logout", (response) => {
       if (this.contactsListObject.length > 0) {
         var index = this.contactsListObject.findIndex(element => element.Id == response.loggedinUserId);
-        console.log("Index at login"+index);
+        console.log("Index at login" + index);
         if (index >= 0) {
           this.contactsListObject[index].Status = 0;
           this.contactsListObject[index].SocketId = null;
@@ -59,13 +63,20 @@ export class ContactListComponent implements OnInit {
     });
   }
 
+
   public openChatHistory(contactId: number) {
     this.openContactChat.emit(contactId);
     //  add the active class to the clicked element
     this.activeUser = contactId;
-    var index = this.contactsListObject.findIndex(element => element.Id === contactId)
-    this.contactsListObject[index].message.unreadCount = 0;
-    this.cd.detectChanges();
+    var index = this.contactsListObject.findIndex(element => element.Id === contactId);
+    if (index >= 0) {
+      this.contactsListObject[index].message.unreadCount = 0;
+      this.cd.detectChanges();
+    }
+  }
+
+  public setDate(dateString: string) {
+    return new Date(dateString)
   }
 
 

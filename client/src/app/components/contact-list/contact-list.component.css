@@ -19,9 +19,7 @@
       padding: 6px 0 46px 8px;
     }
   }
-   .contact-list  ul li.contact-item:hover {
-    background: #e5e6e7;
-  }
+
    .contact-list  ul li.contact.active {
     background: #e5e6e7;
     border-right: 5px solid #435f7a;
@@ -46,7 +44,6 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 2px solid #2c3e50;
     background: #95a5a6;
   }
    .contact-list  ul li.contact-item .wrap span.online {
@@ -77,6 +74,7 @@
   }
    .contact-list  ul li.contact-item .wrap .meta .name {
     font-weight: 600;
+    text-transform:uppercase;
   }
    .contact-list  ul li.contact-item .wrap .meta .preview {
     margin: 5px 0 0 0;
@@ -101,5 +99,14 @@
   }
 
   .activeChat{
-    background: #c9c9cc;
+    background: #e5e6e7;
+  }
+  .activeChat h6{
+    color:#20c3b4;
+  }
+  
+  .notification{
+    background: #fe4f4e;
+    padding: 6px;
+    border-radius: 4p
   }

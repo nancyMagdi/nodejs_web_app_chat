@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ContactListService } from '../../services/contact-list.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -26,17 +26,20 @@ export class MainContainerComponent implements OnInit {
   public displayedListType: number;
   public userInfo: any;
   public curerntUserObject:any ;
+  public newChatMessage:any;
   constructor(private contactListservice: ContactListService, private router: Router,
-    private authService: AuthenticationService, private socketService: SocketService ,private userDataService: UserService) {
+    private authService: AuthenticationService, private socketService: SocketService ,
+    private userDataService: UserService, private cd: ChangeDetectorRef) {
     this.sideMenuItems = listViewEnum;   
   }
 
   ngOnInit() {
-    this.changeView(listViewEnum.displayChatList);
     this.userDataService.userData.subscribe((data) => {
       if (data != null) {
         console.log(data);
         this.curerntUserObject = data;
+        this.changeView(listViewEnum.displayChatList);
+        this.listenToNewMessage();
       }
     })
   }
@@ -45,16 +48,13 @@ export class MainContainerComponent implements OnInit {
     listener to the child component of the contact list to set the chat user id
   */
   public openContactChat(contactId: number) {
-    console.log(contactId);
     // filter the user info 
     let index = this.contactsListObject.findIndex(element => element.Id === contactId);
     this.userInfo = this.contactsListObject[index];
-    console.log(this.userInfo);
     this.otherUserId = contactId;
   }
 
   public changeView(viewToDisplay: listViewEnum) {
-    console.log(viewToDisplay);
     this.loading = true;
     this.contactsListObject = null;
     this.displayedListType = viewToDisplay;
@@ -94,5 +94,25 @@ export class MainContainerComponent implements OnInit {
   public logout() {
     this.socketService.socketEmit("logout", { id: this.curerntUserObject.id });
     this.authService.logout();
+  }
+
+  public listenToNewMessage() {
+    this.socketService.socketOn('message-received', (response) => {
+      console.log(response);
+      if (response && response.FromUserId !== this.otherUserId) {
+        // set the contact list notification if the user chat is not openned
+        var index = this.contactsListObject.findIndex(element => element.Id === response.FromUserId);
+        if (index >= 0) {
+          this.contactsListObject[index].message.unreadCount += 1;
+          this.contactsListObject[index].message.message = response.MessageText;
+          this.contactsListObject[index].message.date = response.CreationDateTime;
+        }
+        this.cd.detectChanges();
+      }else if(response && response.FromUserId === this.otherUserId){
+        // push the message to the chat component
+        this.newChatMessage = response;
+        this.cd.detectChanges();
+      }
+    });
   }
 }

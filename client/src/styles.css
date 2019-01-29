@@ -10,3 +10,18 @@ body {
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
     -webkit-font-smoothing: antialiased;
 }
+
+.form-container{
+    width: fit-content;
+    margin-left: 40%;
+    margin-top: 10%;
+}
+
+.left-link{
+    text-align: center;
+    vertical-align: -webkit-baseline-middle;
+}
+
+h5{
+    text-align: center;
+}

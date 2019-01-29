@@ -1,18 +1,4 @@
-#frame { 
-    height: 92vh;
-    min-height: 300px;
-    max-height: 720px;
-    background: #f0f0f2;
-    margin: 5% 10% ;
-    border-radius: 10px;
-}
 
-  @media screen and (max-width: 360px) {
-    #frame{
-      width: 100%;
-      height: 100vh;
-    }
-  }
   #frame .side-menu-container {
     float: left;
     width: 30%;
@@ -67,7 +53,6 @@
   }
   .side-menu-container .btn-group{
     width: 100%;
-    margin-top: 60px;
   }
   .side-menu-container .btn-group .btn{
     background: #c9c9cc;
@@ -92,4 +77,8 @@
 
   .side-menu-container .contact-profile .fa-sign-out-al {
     cursor: pointer;
+  }
+
+  .active-tab{
+    background: #20c3b4;
   }

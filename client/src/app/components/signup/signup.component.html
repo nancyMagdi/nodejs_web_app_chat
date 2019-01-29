@@ -1,5 +1,6 @@
-<div class="form-container">
+<div class="jumbotron form-container">
   <form [formGroup]="signupForm" (ngSubmit)="save(signupForm.value)">
+    <h5> Sign Up</h5>
     <mat-form-field class="example-full-width">
       <input matInput formControlName="name" placeholder="Full Name" type="text" value="">
     </mat-form-field>
@@ -12,7 +13,7 @@
       <input matInput placeholder="Password" formControlName="password" type="password" value="">
     </mat-form-field>
     <div class="clear"></div>
-    <a href="/">Login</a>
-    <button mat-raised-button color="primary" type="submit" class="controller-btn">Sign Up</button>
+    <a class="left-link"href="/">Login</a>
+    <button mat-raised-button color="primary" type="submit" class="controller-btn float-right">Sign Up</button>
   </form>
 </div>

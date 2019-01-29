@@ -33,7 +33,6 @@ export class HttpInterceptorHelper implements HttpInterceptor {
         } else {
             cloneReq = request.clone({url });
         }
-        console.log(cloneReq);
         return next.handle(cloneReq);
     }
 }

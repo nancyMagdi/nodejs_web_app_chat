@@ -52,8 +52,6 @@ export class AuthenticationService {
       if (token != null) {
         if (this.userService) {
           localStorage.setItem('token', token);
-          var username = localStorage.getItem('username');
-          this.userService.getUserdata(username);
         }
         this.isLoggedIn.next(true)
       } else {
