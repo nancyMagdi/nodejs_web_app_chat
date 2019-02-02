@@ -8,15 +8,22 @@
 	<div class="messages">
 		<ul>
 			<li *ngFor="let item of chatHistory" [ngClass]="{'sent':item.FromUserId== userInfo.Id, 'replies':item.ToUserId==userInfo.Id}">
-				<p class="message">{{item.MessageText}}</p> <p class="date">{{setDate(item.CreationDateTime) | date :"shortTime"}}</p>
+				<p class="message">
+					<span *ngIf="item.AttachementLocation">
+						<button class="btn btn-link" (click)="downloadFile(item.AttachementLocation)">
+							<i class="fa fa-file-download fa-lg"></i>{{item.AttachementLocation}}</button> </span>
+					{{item.MessageText}}
+				</p>
+				<p class="date">{{setDate(item.CreationDateTime) | date :"shortTime"}}</p>
 			</li>
 		</ul>
 	</div>
 	<div class="message-input">
 		<div class="wrap">
-			<form  [formGroup]="sendMessageForm" (ngSubmit)="sendMessage(sendMessageForm.value)">
-				<i class="fa fa-paperclip attachment fa-lg float-left" aria-hidden="true"></i>
-				<input formControlName="message"  type="text" placeholder="Write your message...">
+			<form [formGroup]="sendMessageForm" (ngSubmit)="sendMessage(sendMessageForm.value)">
+				<i class="fa fa-paperclip attachment fa-lg float-left" aria-hidden="true" (click)="pressToUploadFile()"></i>
+				<input #fileInput type="file" name="selectedFile" (change)="selectFile($event)" hidden="true" />
+				<input formControlName="message" type="text" placeholder="Write your message...">
 				<button class="submit" class="btn" type="submit">Send</button>
 			</form>
 		</div>

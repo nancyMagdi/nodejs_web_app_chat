@@ -39,9 +39,9 @@ export class ContactListService {
     return promise;
   }
 
-  getContactListOfChatHistory() {    
+  getContactListOfChatHistory(curerntUserObjectId:number) {    
     let promise = new Promise((resolve, reject) => {
-      this.http.get("/messages/getContactChatHistory/" + this.curerntUserObject.id).subscribe((ret: any) => {
+      this.http.get("/messages/getContactChatHistory/" + curerntUserObjectId).subscribe((ret: any) => {
         resolve(ret.data);
       }, ((err) => {
         reject(err);

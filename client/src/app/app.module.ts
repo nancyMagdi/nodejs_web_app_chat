@@ -14,7 +14,10 @@ import { SharedModule } from './shared/shared.module';
 import { MainContainerComponent } from './components/main-container/main-container.component' ;
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
+import { AuthGuardService } from './services/auth-guard.service';
+import {AuthenticationService} from "./services/authentication.service";
+import {UserService} from "./services/user.service";
 
 const tokenInterceptorOptions = {
   provide: HTTP_INTERCEPTORS,
@@ -40,10 +43,13 @@ const tokenInterceptorOptions = {
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
+    SnotifyModule
   ],  
   providers: [
     tokenInterceptorOptions,
-  //  AuthGuardService
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
+    SnotifyService,
+    AuthGuardService
   ],
   bootstrap: [AppComponent],
   schemas: [

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 //import { HttpClient, HttpHeaderResponse, HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { UserService } from "../services/user.service";
+
 import { HttpClient } from '@angular/common/http';
 
 export interface ApiResponse {
@@ -19,7 +19,7 @@ export class AuthenticationService {
   public isLoggedIn: BehaviorSubject<Boolean>;
   public loginError: BehaviorSubject<any>;
 
-  constructor(private http: HttpClient, private router: Router, private userService: UserService) {
+  constructor(private http: HttpClient, private router: Router) {
     this.isLoggedIn = new BehaviorSubject(false);
     this.userToken = new BehaviorSubject<string>(localStorage.getItem("token"));
     this.loginError = new BehaviorSubject(null);
@@ -50,9 +50,8 @@ export class AuthenticationService {
     this.userToken.subscribe(token => {
 
       if (token != null) {
-        if (this.userService) {
           localStorage.setItem('token', token);
-        }
+        
         this.isLoggedIn.next(true)
       } else {
         localStorage.removeItem('token');
@@ -64,17 +63,4 @@ export class AuthenticationService {
     });
   }
 
-  public isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    if (token) {
-      return true;
-    }
-    return false;
-  }
-
-  public logout() {
-    this.userService.clearUserData();
-    this.userToken.next(null);
-    this.router.navigate[""];
-  }
 }

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { SocketService } from '../services/socket.service';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   public userData: BehaviorSubject<any>;
-  constructor(private _http: HttpClient,private socketService: SocketService) {
+  constructor(private _http: HttpClient,private socketService: SocketService,private router: Router) {
     this.userData = new BehaviorSubject(null);
     if (localStorage.getItem('token')) {
       var username = localStorage.getItem('username');
@@ -24,6 +25,10 @@ export class UserService {
       localStorage.setItem('currentUser', JSON.stringify(data));
       this.userData.next(data);
     });
+  }
+  public logout() {
+    this.clearUserData();
+    this.router.navigate[""];
   }
 
   public clearUserData(): any {

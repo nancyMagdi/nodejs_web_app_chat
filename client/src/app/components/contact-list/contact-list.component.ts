@@ -28,17 +28,19 @@ export class ContactListComponent implements OnInit {
   private activeUser: number;
 
   constructor(private socketService: SocketService, private cd: ChangeDetectorRef,
-     private userDataService: UserService) {}
+    private userDataService: UserService) { }
 
   ngOnInit() {
     this.userDataService.userData.subscribe((data) => {
-      this.listenToLogin();
+      if (data != null) {
+        this.listenToLogin();
+      }
     });
   }
 
   public listenToLogin() {
-    this.socketService.socketOn("user-logged-in", (response) => {
-      if (this.contactsListObject.length > 0) {
+    this.socketService.socketOn("user-logged-in").subscribe((response) => {
+      if (this.contactsListObject && this.contactsListObject.length > 0) {
         var index = this.contactsListObject.findIndex(element => element.Id == response.loggedinUserId)
         console.log("Index at login" + index);
         if (index >= 0) {
@@ -49,7 +51,7 @@ export class ContactListComponent implements OnInit {
       }
     });
 
-    this.socketService.socketOn("logout", (response) => {
+    this.socketService.socketOn("logout").subscribe((response) => {
       if (this.contactsListObject.length > 0) {
         var index = this.contactsListObject.findIndex(element => element.Id == response.loggedinUserId);
         console.log("Index at login" + index);

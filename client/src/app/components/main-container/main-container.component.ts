@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewContainerRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ContactListService } from '../../services/contact-list.service';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../../services/authentication.service';
 import { SocketService } from '../../services/socket.service';
 import {UserService} from "../../services/user.service";
+import {SnotifyService} from 'ng-snotify';
+
 export enum listViewEnum {
   displayChatList = 1,
   displayContactList = 2,
@@ -28,7 +29,7 @@ export class MainContainerComponent implements OnInit {
   public curerntUserObject:any ;
   public newChatMessage:any;
   constructor(private contactListservice: ContactListService, private router: Router,
-    private authService: AuthenticationService, private socketService: SocketService ,
+    private socketService: SocketService , private notificatinService : SnotifyService,
     private userDataService: UserService, private cd: ChangeDetectorRef) {
     this.sideMenuItems = listViewEnum;   
   }
@@ -63,7 +64,7 @@ export class MainContainerComponent implements OnInit {
         this.displaySearchField = false;
         this.contactsListObject = null;
         // call the service of chat contact and get the data from service 
-        this.contactListservice.getContactListOfChatHistory().then((data: any) => {
+        this.contactListservice.getContactListOfChatHistory(this.curerntUserObject.id).then((data: any) => {
           if (data != null) {
             console.log(data);
             this.contactsListObject = data;
@@ -93,16 +94,23 @@ export class MainContainerComponent implements OnInit {
 
   public logout() {
     this.socketService.socketEmit("logout", { id: this.curerntUserObject.id });
-    this.authService.logout();
+    this.userDataService.logout();
   }
 
   public listenToNewMessage() {
-    this.socketService.socketOn('message-received', (response) => {
+    this.socketService.socketOn('message-received').subscribe((response) => {
       console.log(response);
       if (response && response.FromUserId !== this.otherUserId) {
         // set the contact list notification if the user chat is not openned
         var index = this.contactsListObject.findIndex(element => element.Id === response.FromUserId);
         if (index >= 0) {
+          this.notificatinService.html("<div class='snotifyToast__title'>"+this.contactsListObject[index].FullName+"</div><div class='snotifyToast__body'>"+response.MessageText+"</div> ", {
+          timeout: 5000,
+          showProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          position:"rightTop"
+        });
           this.contactsListObject[index].message.unreadCount += 1;
           this.contactsListObject[index].message.message = response.MessageText;
           this.contactsListObject[index].message.date = response.CreationDateTime;

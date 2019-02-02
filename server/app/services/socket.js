@@ -23,23 +23,26 @@ class Socket {
                 } else if (data.ToUserId === '') {
                     this.io.to(socket.id).emit(`add-message-response`, `Select a user to chat.`);
                 } else {
+                    console.log(data);
                     // save message to db
                     var created = new Date();
                     var savedData = {
-                        FromUserId: data.fromUserId,
-                        ToUserId: data.toUserId,
-                        MessageText: data.messageText.message,
+                        FromUserId: data.FromUserId,
+                        ToUserId: data.ToUserId,
+                        MessageText: data.MessageText,
                         CreationDateTime: created,
                         ChatThreadId: null,
+                        AttachementLocation:data.AttachementLocation,
                         IsRead: 0
                     }
                     const userThread = await messagesController.insertThread(savedData);
                     // check if the user is online 
+                    
                     if (userThread && userThread[0] !== null) {
                         var userThreadData = userThread[0].get({ plain: true });
                         savedData.ChatThreadId = userThreadData.Id
                         // get the user data 
-                        const userData = await userController.getUSerStatus(data.toUserId);
+                        const userData = await userController.getUSerStatus(data.ToUserId);
                         if (userData && userData != null) {
                             // save the message 
                             savedData.IsRead = userData.Status;

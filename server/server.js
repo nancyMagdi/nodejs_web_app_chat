@@ -3,7 +3,7 @@ var express = require('express');
 var cors = require('cors')
 var bodyParser = require('body-parser');
 const socketio = require('socket.io');
-
+const fileUpload = require('express-fileupload');
 const db = require('./app/config/db.config.js');
 const routes = require('./app/router/router')
 const socketEvents = require('./app/services/socket.js');
@@ -20,6 +20,7 @@ class Server {
 
   appConfig() {
     this.app.use(cors());
+    this.app.use(fileUpload());
     // Add headers
     this.app.use(function (req, res, next) {
 

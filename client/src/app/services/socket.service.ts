@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment'
 import * as socketIo from 'socket.io-client';
+import { Observable } from 'rxjs';
 
 const SocketIoConfig = { url: environment.mainserver, options: {} };
 @Injectable({
@@ -24,6 +25,12 @@ export class SocketService {
     this.socket.emit(eventName, params);
   }
 
+  public socketOn(event: string,): Observable<any> {
+    return new Observable<Event>(observer => {
+        this.socket.on(event, (response) => observer.next(response));
+    });
+  }
+  /**
   socketOn(eventName, callback) {
     if (this.socket == null) {
       this.initiateSocket();
@@ -34,7 +41,7 @@ export class SocketService {
       }
     });
   }
-
+*/
   private initiateSocket() {
     var currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
