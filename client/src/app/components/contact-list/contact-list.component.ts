@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { SocketService } from '../../services/socket.service';
 import { UserService } from '../../services/user.service';
+import { ContactListService } from '../../services/contact-list.service';
+import { SnotifyService } from 'ng-snotify';
+
 @Component({
   selector: 'client-contact-list',
   templateUrl: './contact-list.component.html',
@@ -28,7 +31,8 @@ export class ContactListComponent implements OnInit {
   private activeUser: number;
 
   constructor(private socketService: SocketService, private cd: ChangeDetectorRef,
-    private userDataService: UserService) { }
+    private userDataService: UserService, private contactListservice: ContactListService,
+    private notificationService: SnotifyService) { }
 
   ngOnInit() {
     this.userDataService.userData.subscribe((data) => {
@@ -67,10 +71,24 @@ export class ContactListComponent implements OnInit {
 
 
   public openChatHistory(contactId: number) {
+    var index = this.contactsListObject.findIndex(element => element.Id === contactId);
+    if (this.typeOfList === 3) {
+      if (index >= 0) {
+        if (this.contactsListObject[index].isConnected !== 1) {
+          this.notificationService.error('Sorry you must add user first to be able to send messages', {
+            timeout: 2000,
+            showProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            position: "rightTop"
+          });
+        }
+        return ;
+      }
+    }
     this.openContactChat.emit(contactId);
     //  add the active class to the clicked element
     this.activeUser = contactId;
-    var index = this.contactsListObject.findIndex(element => element.Id === contactId);
     if (index >= 0) {
       this.contactsListObject[index].message.unreadCount = 0;
       this.cd.detectChanges();
@@ -81,6 +99,17 @@ export class ContactListComponent implements OnInit {
     return new Date(dateString)
   }
 
-
+  public addContact(newContact: number) {
+    this.contactListservice.addContact(newContact).then((data: any) => {
+      if (data != null) {
+        console.log(data);
+        var index = this.contactsListObject.findIndex(element => element.Id == newContact)
+        console.log("Index at login" + index);
+        if (index >= 0) {
+          this.contactsListObject[index].isConnected = null;
+        }
+      }
+    });
+  }
 
 }

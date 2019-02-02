@@ -51,5 +51,16 @@ export class ContactListService {
     return promise;
   }
 
-  // TODO add search for a contact route in server and in client
+  //  search for a contact route in server and in client
+  searchContact(curerntUserObjectId:number,searched:string) {    
+    let promise = new Promise((resolve, reject) => {
+      this.http.get("/contactList/searchUsers/" + curerntUserObjectId+"/"+searched).subscribe((ret: any) => {
+        resolve(ret.data);
+      }, ((err) => {
+        reject(err);
+      })
+      );
+    })
+    return promise;
+  }
 }

@@ -2,8 +2,11 @@ import { Component, OnInit, ViewContainerRef, ViewChild, ChangeDetectorRef } fro
 import { ContactListService } from '../../services/contact-list.service';
 import { Router } from '@angular/router';
 import { SocketService } from '../../services/socket.service';
-import {UserService} from "../../services/user.service";
-import {SnotifyService} from 'ng-snotify';
+import { UserService } from "../../services/user.service";
+import { SnotifyService } from 'ng-snotify';
+
+import { Subject, Observable } from "rxjs";
+import { debounceTime } from 'rxjs/operators';
 
 export enum listViewEnum {
   displayChatList = 1,
@@ -26,12 +29,13 @@ export class MainContainerComponent implements OnInit {
   public displaySearchField: boolean = false;
   public displayedListType: number;
   public userInfo: any;
-  public curerntUserObject:any ;
-  public newChatMessage:any;
+  public curerntUserObject: any;
+  public searchTextChanged = new Subject<string>();
+  public newChatMessage: any;
   constructor(private contactListservice: ContactListService, private router: Router,
-    private socketService: SocketService , private notificatinService : SnotifyService,
+    private socketService: SocketService, private notificatinService: SnotifyService,
     private userDataService: UserService, private cd: ChangeDetectorRef) {
-    this.sideMenuItems = listViewEnum;   
+    this.sideMenuItems = listViewEnum;
   }
 
   ngOnInit() {
@@ -88,15 +92,25 @@ export class MainContainerComponent implements OnInit {
         // display the search field
         this.displaySearchField = true;
         this.loading = false;
+        this.searchTextChanged.pipe(
+          debounceTime(250)
+        ).subscribe(x => this.getSearchValues(x));
         break;
     }
   }
-
+  /** logout function */
   public logout() {
     this.socketService.socketEmit("logout", { id: this.curerntUserObject.id });
     this.userDataService.logout();
   }
 
+  search(event:any) {
+    this.searchTextChanged.next(event.target.value);
+  }
+
+  /**
+   *  Listen to incomming messages this was placed here in order to effect both chat and contact components 
+   */
   public listenToNewMessage() {
     this.socketService.socketOn('message-received').subscribe((response) => {
       console.log(response);
@@ -104,22 +118,34 @@ export class MainContainerComponent implements OnInit {
         // set the contact list notification if the user chat is not openned
         var index = this.contactsListObject.findIndex(element => element.Id === response.FromUserId);
         if (index >= 0) {
-          this.notificatinService.html("<div class='snotifyToast__title'>"+this.contactsListObject[index].FullName+"</div><div class='snotifyToast__body'>"+response.MessageText+"</div> ", {
-          timeout: 5000,
-          showProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          position:"rightTop"
-        });
+          this.notificatinService.html("<div class='snotifyToast__title'>" + this.contactsListObject[index].FullName + "</div><div class='snotifyToast__body'>" + response.MessageText + "</div> ", {
+            timeout: 5000,
+            showProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            position: "rightTop"
+          });
           this.contactsListObject[index].message.unreadCount += 1;
           this.contactsListObject[index].message.message = response.MessageText;
           this.contactsListObject[index].message.date = response.CreationDateTime;
         }
         this.cd.detectChanges();
-      }else if(response && response.FromUserId === this.otherUserId){
+      } else if (response && response.FromUserId === this.otherUserId) {
         // push the message to the chat component
         this.newChatMessage = response;
         this.cd.detectChanges();
+      }
+    });
+  }
+  /**
+   *  call of the search service
+   */
+  public getSearchValues(value:string) {
+    this.contactListservice.searchContact(this.curerntUserObject.id,value).then((data: any) => {
+      if (data != null) {
+        console.log(data);
+        this.contactsListObject = data;
+        this.loading = false;
       }
     });
   }

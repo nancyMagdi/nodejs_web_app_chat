@@ -43,7 +43,6 @@ exports.getUserContactList = (req, res) => {
 
 exports.addToUserContactList = (req, res) => {
     // Save User to Database
-    console.log(req.body.userId);
     UserContactList.findOrCreate({
         where: {
             [Op.or]: [
@@ -89,4 +88,20 @@ exports.getOnlineContactForUser = (userId) => {
             attributes: ["SocketId"]
         }]
     }).then(users => { return users; }).catch(err => { return err; });
+}
+
+exports.searchForContact = (req,res)=>{
+    db.sequelize.query("SELECT u.FullName , u.Image , u.Status, (select isConnected from contacts_list WHERE (FirstUserId = :userId && SecondUserId = u.Id) or (SecondUserId = :userId && FirstUserId = u.Id) ) as isConnected FROM users u WHERE u.FullName LIKE :searchValue or u.Username LIKE :searchValue",
+    { replacements: { userId: req.params.userId, searchValue: "%"+req.params.searchValue+"%"}, type: db.Sequelize.QueryTypes.SELECT })
+    .then(users => {
+        res.status(200).json({
+            Success: true,
+            data: users
+        });
+    }).catch(err => {
+        res.status(500).json({
+            Success: false,
+            Messge: "Fail! Error -> " + err
+        });
+    });
 }

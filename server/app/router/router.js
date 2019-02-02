@@ -26,6 +26,7 @@ class Routes {
         //Messages files handling
         this.app.get('/api/messages/downloadFile/:threadId/:fileName', [authJwt.verifyToken], messagesController.getFileForDownload);
         this.app.post('/api/messages/saveFile',[authJwt.verifyToken],   messagesController.uploadFile);
+        this.app.get('/api/contactList/searchUsers/:userId/:searchValue',[authJwt.verifyToken],  contactListController.searchForContact);
     }
     routesConfig() {
         this.appRoutes();
