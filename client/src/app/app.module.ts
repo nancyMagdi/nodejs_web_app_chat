@@ -16,8 +16,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 import { AuthGuardService } from './services/auth-guard.service';
-import {AuthenticationService} from "./services/authentication.service";
-import {UserService} from "./services/user.service";
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 const tokenInterceptorOptions = {
   provide: HTTP_INTERCEPTORS,
@@ -43,7 +42,8 @@ const tokenInterceptorOptions = {
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
-    SnotifyModule
+    SnotifyModule,
+    ScrollToModule.forRoot()
   ],  
   providers: [
     tokenInterceptorOptions,

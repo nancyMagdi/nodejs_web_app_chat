@@ -7,15 +7,17 @@ import  { saveAs } from '../../../node_modules/file-saver';
 })
 export class MessagesService {
   private curerntUserObject: any;
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {    }
+  
+  getCurrentUserId(){
     let currentUser = localStorage.getItem("currentUser")
     if (currentUser) {
       this.curerntUserObject = JSON.parse(currentUser);
     }
-
   }
 
   getChatHistory(secondUserId: number, limit: number, offset: number) {
+    this.getCurrentUserId();
     let promise = new Promise((resolve, reject) => {
       this.http.get("/messages/getUsersChatHistory/" + this.curerntUserObject.id + "/" + secondUserId).subscribe((ret: any) => {
         resolve(ret.data);

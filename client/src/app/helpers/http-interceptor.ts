@@ -54,7 +54,7 @@ export class HttpInterceptorHelper implements HttpInterceptor {
                           localStorage.removeItem('token');
                           localStorage.removeItem('currentUser');
                           localStorage.removeItem('username');
-                          this.router.navigate[''];
+                          this.router.navigate(['/']);
                     }else if(error.statusText == "Unknown Error"){
                         this.notificationService.error('Unable to connect to server, please try again later', {
                             timeout: 2000,

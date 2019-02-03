@@ -22,8 +22,8 @@
   }
   @media screen and (max-width: 735px) {
     #frame .side-menu-container {
-      width: 58px;
-      min-width: 58px;
+      width: 40%;
+      min-width: 40%;
     }
   }
 
@@ -42,6 +42,7 @@
     border-radius: 10px;
     color: #9c9e9f;
     border: 2px solid transparent;
+    background: #e5e6e7;
   }
   #frame .side-menu-container .search input:focus {
     outline: none;
@@ -74,6 +75,7 @@
     width: 100%;
     height: 60px;
     line-height: 60px;
+    margin-left: 2%;
   }
   .side-menu-container .contact-profile img {
     width: 40px;
@@ -88,4 +90,8 @@
 
   .active-tab{
     background: #20c3b4;
+  }
+  .logout{
+    cursor: pointer;
+    margin-right: 3%;
   }

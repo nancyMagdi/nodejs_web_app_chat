@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { MessagesService } from "../../services/messages.service";
 import { SocketService } from '../../services/socket.service';
-import { from } from 'rxjs';
+
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import { HttpResponse, HttpEventType } from '@angular/common/http';
+import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
+
 @Component({
   selector: 'client-chat',
   templateUrl: './chat.component.html',
@@ -20,7 +21,8 @@ export class ChatComponent implements OnInit {
   private curerntUserObject: any;
   public selectedFile: File;
   @Input() userInfo: any;
-  @ViewChild('fileInput') fileInput:ElementRef;
+  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('messages') messages: ElementRef;
   @Input() set newMessage(message: any[]) {
     this.chatHistory.push(message);
     this.cd.detectChanges();
@@ -37,12 +39,14 @@ export class ChatComponent implements OnInit {
           //this.chatHistory.unshift(data.reverse());
           this.Loading = false;
           // scroll to the button 
+          this.scrollToBottom();
         }
       });
     }
   }
 
-  constructor(private messageService: MessagesService, private socketService: SocketService, private userDataService: UserService, private cd: ChangeDetectorRef) { }
+  constructor(private messageService: MessagesService, private socketService: SocketService, 
+    private userDataService: UserService, private cd: ChangeDetectorRef,private _scrollToService: ScrollToService) { }
 
   ngOnInit() {
     this.userDataService.userData.subscribe((data) => {
@@ -67,9 +71,9 @@ export class ChatComponent implements OnInit {
     if (this.selectedFile) {
       // call the upload service
       const formdata: FormData = new FormData();
-      const fileName:string = this.selectedFile.name;
+      const fileName: string = this.selectedFile.name;
       formdata.append('selectedFile', this.selectedFile);
-      formdata.append('threadId' , this.threadId.toString());
+      formdata.append('threadId', this.threadId.toString());
 
       this.messageService.pushFileToStorage(formdata).then((data: any) => {
         if (data.Success == true) {
@@ -107,12 +111,13 @@ export class ChatComponent implements OnInit {
     }
     this.socketService.socketEmit("Message-sent", newMessage);
     this.sendMessageForm.reset();
-    
+
     this.chatHistory.push(newMessage);
+    this.scrollToBottom();
     this.cd.detectChanges();
   }
 
-  public selectFile(event:any) {
+  public selectFile(event: any) {
     if (event.target.files.length > 0) {
       this.selectedFile = event.target.files.item(0);
     }
@@ -124,7 +129,15 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  public pressToUploadFile(){
+  public pressToUploadFile() {
     this.fileInput.nativeElement.click();
+  }
+
+  scrollToBottom() {    
+    const config: ScrollToConfigOptions = {
+      target: 'destination'
+    };
+
+    this._scrollToService.scrollTo(config);
   }
 }

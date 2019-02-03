@@ -7,11 +7,15 @@ import { HttpClient } from '@angular/common/http';
 export class ContactListService {
   private curerntUserObject: any;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) { 
+  }
+
+  getCurrentUserId(){
     this.curerntUserObject = JSON.parse(localStorage.getItem("currentUser"));    
   }
 
   addContact(newContactId: number) {
+    this.getCurrentUserId();
     let sentData = {
       "connectToUserId": newContactId,
       "userId": this.curerntUserObject.id
@@ -28,6 +32,7 @@ export class ContactListService {
   }
 
   getContactList() {
+    this.getCurrentUserId();
     let promise = new Promise((resolve, reject) => {
       this.http.get("/contactList/getContactList/" + this.curerntUserObject.id).subscribe((ret: any) => {
         resolve(ret.data);
@@ -40,6 +45,7 @@ export class ContactListService {
   }
 
   getContactListOfChatHistory(curerntUserObjectId:number) {    
+    this.getCurrentUserId();
     let promise = new Promise((resolve, reject) => {
       this.http.get("/messages/getContactChatHistory/" + curerntUserObjectId).subscribe((ret: any) => {
         resolve(ret.data);
@@ -53,6 +59,7 @@ export class ContactListService {
 
   //  search for a contact route in server and in client
   searchContact(curerntUserObjectId:number,searched:string) {    
+    this.getCurrentUserId();
     let promise = new Promise((resolve, reject) => {
       this.http.get("/contactList/searchUsers/" + curerntUserObjectId+"/"+searched).subscribe((ret: any) => {
         resolve(ret.data);

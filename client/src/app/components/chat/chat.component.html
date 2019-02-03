@@ -5,7 +5,7 @@
 		<div class="social-media">
 		</div>
 	</div>
-	<div class="messages">
+	<div #messages class="messages">
 		<ul>
 			<li *ngFor="let item of chatHistory" [ngClass]="{'sent':item.FromUserId== userInfo.Id, 'replies':item.ToUserId==userInfo.Id}">
 				<p class="message">
@@ -17,8 +17,9 @@
 				<p class="date">{{setDate(item.CreationDateTime) | date :"shortTime"}}</p>
 			</li>
 		</ul>
+		<div ></div>
 	</div>
-	<div class="message-input">
+	<div id="destination" class="message-input">
 		<div class="wrap">
 			<form [formGroup]="sendMessageForm" (ngSubmit)="sendMessage(sendMessageForm.value)">
 				<i class="fa fa-paperclip attachment fa-lg float-left" aria-hidden="true" (click)="pressToUploadFile()"></i>

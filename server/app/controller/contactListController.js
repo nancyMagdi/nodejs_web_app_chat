@@ -91,7 +91,7 @@ exports.getOnlineContactForUser = (userId) => {
 }
 
 exports.searchForContact = (req,res)=>{
-    db.sequelize.query("SELECT u.FullName , u.Image , u.Status, (select isConnected from contacts_list WHERE (FirstUserId = :userId && SecondUserId = u.Id) or (SecondUserId = :userId && FirstUserId = u.Id) ) as isConnected FROM users u WHERE u.FullName LIKE :searchValue or u.Username LIKE :searchValue",
+    db.sequelize.query("SELECT u.Id,u.FullName , u.Image , u.Status, (select isConnected from contacts_list WHERE (FirstUserId = :userId && SecondUserId = u.Id) or (SecondUserId = :userId && FirstUserId = u.Id) ) as isConnected FROM users u WHERE Id<> :userId and (u.FullName LIKE :searchValue or u.Username LIKE :searchValue)",
     { replacements: { userId: req.params.userId, searchValue: "%"+req.params.searchValue+"%"}, type: db.Sequelize.QueryTypes.SELECT })
     .then(users => {
         res.status(200).json({

@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class UserService {
   public userData: BehaviorSubject<any>;
-  constructor(private _http: HttpClient,private socketService: SocketService,private router: Router) {
+  constructor(private _http: HttpClient, private socketService: SocketService, private router: Router) {
     this.userData = new BehaviorSubject(null);
     if (localStorage.getItem('token')) {
       var username = localStorage.getItem('username');
@@ -16,7 +16,7 @@ export class UserService {
     }
   }
   public getUserdata(Username: string): any {
-    this._http.get("/user/me/" + Username).subscribe((response: any) => {      
+    this._http.get("/user/me/" + Username).subscribe((response: any) => {
       let data: any = {};
       data.full_name = response.data.FullName;
       data.image = response.data.Image;
@@ -27,11 +27,16 @@ export class UserService {
     });
   }
   public logout() {
+    this.router.navigate(['/']);
     this.clearUserData();
-    this.router.navigate[""];
+    console.log("hello");
+    
   }
 
   public clearUserData(): any {
     this.userData = new BehaviorSubject(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('username');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { SocketService } from '../../services/socket.service';
 import { UserService } from '../../services/user.service';
 import { ContactListService } from '../../services/contact-list.service';
@@ -22,7 +22,7 @@ import { SnotifyService } from 'ng-snotify';
   2) at user click event to open chat emit an event and send the user id to the parent container to open it's chat
   3) display message alert in case the user recieve a new message from him (ToDo)
 */
-export class ContactListComponent implements OnInit {
+export class ContactListComponent implements OnChanges {
   @Input() contactsListObject: any[];
   // 1 for contact chat history , 2 for contact list, 3 for search result
   @Input() typeOfList: number;
@@ -34,9 +34,10 @@ export class ContactListComponent implements OnInit {
     private userDataService: UserService, private contactListservice: ContactListService,
     private notificationService: SnotifyService) { }
 
-  ngOnInit() {
+    ngOnChanges() {
     this.userDataService.userData.subscribe((data) => {
       if (data != null) {
+        this.activeUser = 0;
         this.listenToLogin();
       }
     });

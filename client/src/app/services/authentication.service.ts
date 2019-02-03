@@ -58,7 +58,7 @@ export class AuthenticationService {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('username');
         this.isLoggedIn.next(false);
-        this.router.navigate(['']);
+        this.router.navigate(['/']);
       }
     });
   }
