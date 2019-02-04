@@ -22,7 +22,7 @@ exports.signup = (req, res) => {
     }).catch(err => {
         res.status(500).json({
             Success: false,
-            Messge: "Fail! Error -> " + err
+            Message: "Fail! Error -> " + err
         });
     })
 }

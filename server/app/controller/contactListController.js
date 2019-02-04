@@ -36,7 +36,7 @@ exports.getUserContactList = (req, res) => {
     }).catch(err => {
         res.status(500).json({
             Success: false,
-            Messge: "Fail! Error -> " + err
+            Message: "Fail! Error -> " + err
         });
     });
 }
@@ -66,12 +66,12 @@ exports.addToUserContactList = (req, res) => {
         console.log(created)
         res.status(200).json({
             Success: true,
-            Messge: "User is added to contact list successfully!"
+            Message: "User is added to contact list successfully!"
         });
     }).catch(err => {
         res.status(500).json({
             Success: "false",
-            Messge: "Fail! Error -> " + err
+            Message: "Fail! Error -> " + err
         });
     })
 }
@@ -101,7 +101,7 @@ exports.searchForContact = (req,res)=>{
     }).catch(err => {
         res.status(500).json({
             Success: false,
-            Messge: "Fail! Error -> " + err
+            Message: "Fail! Error -> " + err
         });
     });
 }
