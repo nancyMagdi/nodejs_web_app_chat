@@ -12,5 +12,5 @@ import { Router, NavigationEnd } from '@angular/router';
 
 
 export class AppComponent {
-  title = 'client';
+  title = 'Node js Real time chat';
 }

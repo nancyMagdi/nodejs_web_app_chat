@@ -1,11 +1,11 @@
 <div class="contact-list">
     <ul>
-        <li *ngFor="let item of contactsListObject" [ngClass]="{'activeChat':activeUser== item.Id}" (click)="openChatHistory(item.Id)" class="contact-item">
+        <li *ngFor="let item of contactsListObject" [ngClass]="{'activeChat':activeUser== item.Id}" (click)="(typeOfList < 3 || item.isConnected==1) && openChatHistory(item.Id)" class="contact-item">
             <div class="wrap" >
                 <p *ngIf="typeOfList==1" class="font-small-3 float-right primary">{{ setDate(item.message.date) | date :"shortTime"}}</p>
                 <div class="float-left image">
                     <span class="contact-status" [ngClass]="{'online':item.Status==1 , 'offline':item.Status==0}"></span>
-                    <img src="http://emilcarlsson.se/assets/louislitt.png" alt="">
+                    <img src="https://www.w3schools.com/howto/img_avatar.png" alt="">
                 </div>
                 <div class="meta">
                     <h6 class="name">

@@ -1,6 +1,6 @@
 <div *ngIf="userInfo" class="content">
 	<div class="contact-profile">
-		<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="">
+		<img src="https://www.w3schools.com/howto/img_avatar.png" alt="">
 		<p>{{userInfo?.FullName}}</p>
 		<div class="social-media">
 		</div>
@@ -19,7 +19,7 @@
 		</ul>
 		<div ></div>
 	</div>
-	<div id="destination" class="message-input">
+	<div  class="message-input">
 		<div class="wrap">
 			<form [formGroup]="sendMessageForm" (ngSubmit)="sendMessage(sendMessageForm.value)">
 				<i class="fa fa-paperclip attachment fa-lg float-left" aria-hidden="true" (click)="pressToUploadFile()"></i>

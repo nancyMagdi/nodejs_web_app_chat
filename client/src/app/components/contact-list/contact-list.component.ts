@@ -102,12 +102,20 @@ export class ContactListComponent implements OnChanges {
 
   public addContact(newContact: number) {
     this.contactListservice.addContact(newContact).then((data: any) => {
-      if (data != null) {
+      if (data.Success == true) {
+        this.notificationService.success(data.Message, {
+          timeout: 2000,
+          showProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          position: "rightTop"
+        });
         console.log(data);
         var index = this.contactsListObject.findIndex(element => element.Id == newContact)
         console.log("Index at login" + index);
         if (index >= 0) {
           this.contactsListObject[index].isConnected = null;
+          this.cd.detectChanges();
         }
       }
     });

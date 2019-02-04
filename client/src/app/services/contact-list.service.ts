@@ -22,7 +22,7 @@ export class ContactListService {
     }
     let promise = new Promise((resolve, reject) => {
       this.http.post("/contactList/addToContactList", sentData).subscribe((ret: any) => {
-        resolve(ret.data);
+        resolve(ret);
       }, ((err) => {
         reject(err);
       })
